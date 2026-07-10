@@ -30,7 +30,7 @@ export function SiteHeader() {
   return (
     <>
       <header className="fixed inset-x-0 top-0 z-50 flex items-center justify-between px-6 py-6 md:px-10">
-        <Link href="/" className={`flex items-center gap-3 ${open ? 'text-white' : 'text-black'}`}>
+        <Link href="/" className={`flex items-center gap-3 logo-fantasy ${open ? 'text-white' : 'text-black'}`}>
           <FantasyLogo className="h-8 w-8" />
           <AnimatePresence>
             {!open && (
