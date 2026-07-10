@@ -1,0 +1,325 @@
+/* ─── Cards Title / Header ─────────────────────────────────────────────── */
+.title-container {
+    margin-bottom: 80px;
+    position: relative;
+    display: inline-block;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+}
+
+.main-title {
+    font-size: 6rem;
+    font-family: var(--font-title);
+    font-weight: 800;
+    letter-spacing: -4px;
+    color: var(--color-dark);
+}
+
+.italic-text {
+    font-family: var(--font-body);
+    font-style: italic;
+    font-weight: 400;
+    margin-left: -5px;
+}
+
+.title-underline-svg {
+    position: absolute;
+    bottom: -15px;
+    right: 0;
+    width: 160px;
+    height: auto;
+    color: var(--color-dark);
+}
+
+.title-underline-svg path {
+    stroke-dasharray: 200;
+    stroke-dashoffset: 200;
+}
+
+/* ─── Cards Wrapper ──────────────────────────────────────────────────────── */
+.cards-wrapper {
+    position: relative;
+    width: 100%;
+    max-width: 1400px;
+    height: 650px;
+    margin: 100px auto;
+    display: flex;
+    justify-content: center;
+    overflow: visible;
+}
+
+/* ─── Base Card ──────────────────────────────────────────────────────────── */
+.card {
+    width: 320px;
+    height: 460px;
+    position: absolute;
+    cursor: pointer;
+    transform-origin: center center;
+    perspective: 1000px;
+    transform-style: preserve-3d;
+}
+
+.card-inner {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: stretch;
+    gap: 1.5rem;
+    padding: 3.5rem 1.5rem 1.5rem;
+    border-radius: 10px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    background-color: inherit;
+    color: inherit;
+    transform-style: preserve-3d;
+    transition: transform 0.1s ease-out;
+}
+
+.card-title {
+    text-align: left;
+    font-size: 2.2rem;
+    font-family: var(--font-title);
+    font-weight: 800;
+    margin-top: 30px;
+    line-height: 1;
+    letter-spacing: -1px;
+    transform: translateZ(20px);
+}
+
+.card-divider-svg {
+    width: 100%;
+    height: auto;
+    display: block;
+    color: rgba(255, 255, 255, 0.8);
+    margin: 0;
+    transform: translateZ(10px);
+}
+
+/* ─── Card Color Variants ────────────────────────────────────────────────── */
+.card-green {
+    background-color: var(--color-green);
+    left: calc(50% - 700px);
+    top: 50px;
+    transform: rotate(4deg);
+    z-index: 1;
+}
+
+.card-darkblue {
+    background-color: var(--color-lightblue);
+    color: var(--color-dark-theme-dark, #121214);
+    left: calc(50% - 430px);
+    top: 100px;
+    transform: rotate(-5deg);
+    z-index: 2;
+}
+
+.card-orange {
+    background-color: var(--color-orange);
+    color: var(--color-dark-theme-dark, #121214);
+    left: calc(50% - 220px);
+    top: 20px;
+    transform: rotate(5deg);
+    z-index: 3;
+}
+
+.card-maroon {
+    background-color: var(--color-maroon);
+    left: calc(50% + 50px);
+    top: 30px;
+    transform: rotate(-8deg);
+    z-index: 4;
+}
+
+.card-pink {
+    background-color: var(--color-pink);
+    color: var(--color-dark-theme-dark, #121214);
+    left: calc(50% + 320px);
+    top: 70px;
+    transform: rotate(5deg);
+    z-index: 5;
+}
+
+/* Expand hit area for middle cards to bridge gaps */
+.card-darkblue::after,
+.card-orange::after,
+.card-maroon::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: -35px;
+    right: -35px;
+}
+
+/* Light card divider overrides */
+.card-pink .card-divider-svg,
+.card-orange .card-divider-svg,
+.card-darkblue .card-divider-svg {
+    color: rgba(0, 0, 0, 0.8);
+}
+
+/* ─── Card List ──────────────────────────────────────────────────────────── */
+.card-list {
+    list-style: none;
+    font-family: var(--font-body);
+    font-weight: 500;
+    transform: translateZ(15px);
+}
+
+.card-list li {
+    margin-bottom: 8px;
+    font-size: 1.15rem;
+    font-weight: 500;
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    line-height: 1.3;
+    letter-spacing: -0.3px;
+}
+
+.services-card__bullet-svg {
+    width: 14px;
+    height: 18px;
+    flex-shrink: 0;
+    margin-top: 2px;
+    color: currentColor;
+}
+
+/* ─── Card Sticker Variables ─────────────────────────────────────────────── */
+:root {
+    --sticker-camera-w: 160px;
+    --sticker-phone-w: 120px;
+    --sticker-smiley-w: 120px;
+    --sticker-hand-w: 120px;
+    --sticker-heart-w: 140px;
+
+    --sticker-camera-top: -45px;
+    --sticker-camera-left: 120px;
+
+    --sticker-phone-top: -45px;
+    --sticker-phone-left: 155px;
+
+    --sticker-smiley-top: -50px;
+
+    --sticker-hand-top: -40px;
+
+    --sticker-heart-top: -50px;
+    --sticker-heart-right: 15px;
+}
+
+/* ─── Card Stickers ──────────────────────────────────────────────────────── */
+.card-sticker {
+    position: absolute;
+    z-index: 10;
+    pointer-events: none;
+}
+
+.card-sticker img {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.card-sticker.sticker-camera {
+    width: var(--sticker-camera-w);
+    height: auto;
+    top: var(--sticker-camera-top);
+    left: var(--sticker-camera-left);
+    transform: translateZ(40px) rotate(3deg);
+}
+
+.card-sticker.sticker-phone {
+    width: var(--sticker-phone-w);
+    height: auto;
+    top: var(--sticker-phone-top);
+    left: var(--sticker-phone-left);
+    transform: translateZ(40px) rotate(1deg);
+}
+
+.card-sticker.sticker-smiley {
+    width: var(--sticker-smiley-w);
+    height: auto;
+    top: var(--sticker-smiley-top);
+    left: 70%;
+    transform: translateX(-50%) translateZ(40px) rotate(4deg);
+}
+
+.card-sticker.sticker-hand {
+    width: var(--sticker-hand-w);
+    height: auto;
+    top: var(--sticker-hand-top);
+    left: 70%;
+    transform: translateX(-50%) translateZ(40px) rotate(8deg);
+}
+
+.card-sticker.sticker-heart {
+    width: var(--sticker-heart-w);
+    height: auto;
+    top: var(--sticker-heart-top);
+    right: var(--sticker-heart-right);
+    transform: translateZ(40px) rotate(1deg);
+}
+
+/* ─── Tablet (769px – 1200px) ────────────────────────────────────────────── */
+@media (min-width: 769px) and (max-width: 1200px) {
+    .cards-wrapper {
+        height: auto;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 50px;
+        padding-bottom: 50px;
+        gap: 30px;
+        overflow: visible;
+    }
+
+    .card {
+        position: relative;
+        left: auto !important;
+        top: auto !important;
+        transform: none !important;
+        width: 90%;
+        max-width: 400px;
+        height: auto;
+        min-height: 400px;
+        margin-bottom: 20px;
+    }
+}
+
+/* ─── Mobile (≤ 768px) ───────────────────────────────────────────────────── */
+@media (max-width: 768px) {
+    .main-title {
+        font-size: 3.5rem;
+        letter-spacing: -2px;
+    }
+
+    .title-underline-svg {
+        width: 100px;
+        bottom: -10px;
+    }
+
+    .title-container {
+        margin-bottom: 50px;
+    }
+
+    .cards-wrapper {
+        position: relative !important;
+        display: block !important;
+        width: 100% !important;
+        margin: 0 auto !important;
+        overflow: visible !important;
+    }
+
+    .card {
+        width: 82vw;
+        max-width: 340px;
+        min-height: 420px;
+        height: auto;
+    }
+
+    .card-sticker {
+        pointer-events: none;
+    }
+}
