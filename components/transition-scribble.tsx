@@ -82,19 +82,7 @@ export default function TransitionScribble() {
                     opacity: 1,
                     scale: 1,
                     duration: durIn * 0.5,
-                    ease: 'power2.out',
-                    onStart: () => {
-                        if (logoImage) {
-                            gsap.to(logoImage, {
-                                rotation: 5,
-                                duration: 0.15,
-                                repeat: -1,
-                                yoyo: true,
-                                ease: 'power1.inOut',
-                                overwrite: 'auto'
-                            });
-                        }
-                    }
+                    ease: 'power2.out'
                 }, durIn * 0.4);
             }
 
