@@ -19,6 +19,7 @@ const secondaryNav = [
 
 export function SiteHeader() {
   const [open, setOpen] = useState(false)
+  const [isScrolledPastHero, setIsScrolledPastHero] = useState(false)
 
   useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : ''
@@ -27,18 +28,33 @@ export function SiteHeader() {
     }
   }, [open])
 
+  useEffect(() => {
+    const handleScroll = () => {
+      if (window.scrollY >= window.innerHeight - 100) {
+        setIsScrolledPastHero(true)
+      } else {
+        setIsScrolledPastHero(false)
+      }
+    }
+
+    window.addEventListener('scroll', handleScroll)
+    handleScroll()
+
+    return () => window.removeEventListener('scroll', handleScroll)
+  }, [])
+
   return (
     <>
       <header className="fixed inset-x-0 top-0 z-50 flex items-center justify-between px-6 py-6 md:px-10">
-        <Link href="/" className={`flex items-center gap-3 logo-fantasy ${open ? 'text-white' : 'text-black'}`}>
-          <FantasyLogo className="h-8 w-8" />
+        <Link href="/" className={`flex items-center gap-3 logo-fantasy ${(open || isScrolledPastHero) ? 'text-white' : 'text-black'} transition-colors duration-300`}>
+          <FantasyLogo className="h-11 w-11 md:h-12 md:w-12" />
           <AnimatePresence>
             {!open && (
               <motion.span
                 initial={{ opacity: 0, x: -6 }}
                 animate={{ opacity: 1, x: 0 }}
                 exit={{ opacity: 0, x: -6 }}
-                className="text-sm font-semibold tracking-[0.25em] text-black"
+                className={`text-sm font-semibold tracking-[0.25em] ${(open || isScrolledPastHero) ? 'text-white' : 'text-black'} transition-colors duration-300`}
               >
                 RAPHAEL
               </motion.span>

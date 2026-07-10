@@ -183,14 +183,11 @@
   }
   html {
     scroll-behavior: smooth;
-    overflow-x: hidden;
-    max-width: 100%;
   }
   body {
     @apply bg-background text-foreground;
     font-family: var(--font-sans);
     overflow-x: hidden;
-    max-width: 100%;
   }
 }
 
@@ -216,14 +213,4 @@
 /* ─── Transition States ──────────────────────────────────────────────────── */
 body.is-transitioning {
   pointer-events: none !important;
-}
-
-.transition-logo-container {
-  position: fixed !important;
-  z-index: 1000000 !important;
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) scale(0.8);
-  opacity: 0;
-  pointer-events: none;
 }

@@ -12,14 +12,21 @@ export default function TransitionScribble() {
         if (!transitionScribblePath || !transitionScribbleSvg) return;
 
         const transitionColors = [
-            '#0d9488', '#14b8a6', '#0f766e', '#059669', '#10b981', '#0891b2', '#06b6d4'
+            '#14b8a6', // Teal
+            '#10b981', // Emerald
+            '#06b6d4', // Cyan
+            '#2dd4bf', // Light Teal
+            '#0d9488',
+            '#0f766e',// Medium Teal
+            '#ffffff' // Crisp White
+            // Deep Teal
         ];
 
         const runScribbleAnimation = (e: Event | null) => {
             if (e) e.preventDefault();
             if (
-                gsap.isTweening(transitionScribblePath) || 
-                gsap.isTweening(transitionScribbleSvg) || 
+                gsap.isTweening(transitionScribblePath) ||
+                gsap.isTweening(transitionScribbleSvg) ||
                 document.body.classList.contains('is-transitioning')
             ) return;
 
@@ -38,18 +45,22 @@ export default function TransitionScribble() {
             const randomColor = transitionColors[Math.floor(Math.random() * transitionColors.length)];
             transitionScribbleSvg.style.color = randomColor;
 
-            gsap.set(transitionScribblePath, { 
-                strokeDasharray: `${l}`, 
-                strokeDashoffset: `${l}`, 
-                strokeWidth: strokeWidthStart, 
-                opacity: 1 
+            gsap.set(transitionScribblePath, {
+                strokeDasharray: `${l}`,
+                strokeDashoffset: `${l}`,
+                strokeWidth: strokeWidthStart,
+                opacity: 1
             });
             gsap.set(transitionScribbleSvg, { opacity: 1, x: 0, y: 0, rotation: 0 });
 
             // Setup logo animation references
             const logoContainer = document.querySelector('.transition-logo-container') as HTMLElement | null;
+            const logoImage = document.querySelector('.transition-logo-container img') as HTMLElement | null;
             if (logoContainer) {
                 gsap.set(logoContainer, { opacity: 0, scale: 0.8 });
+            }
+            if (logoImage) {
+                gsap.set(logoImage, { rotation: 0 });
             }
 
             document.body.classList.add('is-transitioning');
@@ -71,7 +82,19 @@ export default function TransitionScribble() {
                     opacity: 1,
                     scale: 1,
                     duration: durIn * 0.5,
-                    ease: 'power2.out'
+                    ease: 'power2.out',
+                    onStart: () => {
+                        if (logoImage) {
+                            gsap.to(logoImage, {
+                                rotation: 5,
+                                duration: 0.15,
+                                repeat: -1,
+                                yoyo: true,
+                                ease: 'power1.inOut',
+                                overwrite: 'auto'
+                            });
+                        }
+                    }
                 }, durIn * 0.4);
             }
 
@@ -80,7 +103,7 @@ export default function TransitionScribble() {
 
             drawTl.call(() => {
                 window.scrollTo(0, 0);
-            }, [], durIn);
+            }, null, durIn);
 
             // Animate Logo Out (fade out when scribble begins to open up)
             if (logoContainer) {
@@ -88,7 +111,13 @@ export default function TransitionScribble() {
                     opacity: 0,
                     scale: 1.1,
                     duration: durOut * 0.4,
-                    ease: 'power2.in'
+                    ease: 'power2.in',
+                    onComplete: () => {
+                        if (logoImage) {
+                            gsap.killTweensOf(logoImage);
+                            gsap.set(logoImage, { rotation: 0 });
+                        }
+                    }
                 }, durIn + (durOut * 0.3));
             }
 
@@ -129,13 +158,13 @@ export default function TransitionScribble() {
                     style={{ strokeWidth: '0%', strokeDashoffset: '0.001', strokeDasharray: '0px, 999999px' }}
                 />
             </svg>
-            <div className="transition-logo-container flex flex-col items-center gap-6">
+            <div className="transition-logo-container opacity-0 pointer-events-none fixed z-[10000] top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 flex flex-col items-center gap-6">
                 <img
                     src="/Raphael.png"
                     alt="Raphael Logo"
                     className="w-28 h-28 object-contain rounded-full shadow-[0_0_40px_rgba(20,184,166,0.15)]"
                 />
-                <h1 className="text-lg md:text-xl font-bold tracking-[0.35em] text-white uppercase text-center pl-[0.35em]">
+                <h1 className="text-lg md:text-xl font-bold tracking-[0.35em] text-black uppercase text-center pl-[0.35em]">
                     RAPHAEL CREATIVES
                 </h1>
             </div>
