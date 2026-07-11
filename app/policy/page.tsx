@@ -19,7 +19,7 @@ export default function Page() {
           className="relative z-10 flex flex-col gap-6"
         >
           <span className="text-teal-400 font-semibold tracking-wider text-xs uppercase">Compliance & Protection</span>
-          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight leading-none">
+          <h1 className="text-3xl sm:text-4xl md:text-6xl font-extrabold tracking-tight leading-none">
             Privacy Policy &{' '}
             <span className="bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent">
               Terms of Use.

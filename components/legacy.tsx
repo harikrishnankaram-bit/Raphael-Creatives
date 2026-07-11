@@ -17,7 +17,7 @@ export function Legacy() {
   return (
     <section
       ref={ref}
-      className="relative min-h-[130vh] overflow-hidden bg-black px-6 py-32 md:px-10"
+      className="relative flex flex-col justify-between md:block min-h-[100vh] md:min-h-[130vh] overflow-hidden bg-black px-6 py-32 md:px-10"
     >
       <div className="ml-auto max-w-4xl">
         <TextReveal
@@ -26,27 +26,29 @@ export function Legacy() {
         />
       </div>
 
-      <motion.div
-        style={{ y: y1 }}
-        className="absolute bottom-24 left-6 h-52 w-[42%] max-w-xl overflow-hidden rounded-xl bg-card md:left-10 md:h-72"
-      >
-        <img
-          src="/legacy-video.png"
-          alt="A video marketing platform shown on a laptop and phone"
-          className="h-full w-full object-cover"
-        />
-      </motion.div>
+      <div className="relative mt-16 flex flex-col gap-6 md:block md:mt-0">
+        <motion.div
+          style={{ y: y1 }}
+          className="relative w-full h-48 md:absolute md:bottom-24 md:left-10 md:h-72 md:w-[42%] max-w-xl overflow-hidden rounded-xl bg-card"
+        >
+          <img
+            src="/legacy-video.png"
+            alt="A video marketing platform shown on a laptop and phone"
+            className="h-full w-full object-cover"
+          />
+        </motion.div>
 
-      <motion.div
-        style={{ y: y2 }}
-        className="absolute bottom-0 right-6 h-52 w-[42%] max-w-xl overflow-hidden rounded-xl bg-card md:right-10 md:h-72"
-      >
-        <img
-          src="/legacy-weather.png"
-          alt="A minimalist weather app across several phones"
-          className="h-full w-full object-cover"
-        />
-      </motion.div>
+        <motion.div
+          style={{ y: y2 }}
+          className="relative w-full h-48 md:absolute md:bottom-0 md:right-10 md:h-72 md:w-[42%] max-w-xl overflow-hidden rounded-xl bg-card"
+        >
+          <img
+            src="/legacy-weather.png"
+            alt="A minimalist weather app across several phones"
+            className="h-full w-full object-cover"
+          />
+        </motion.div>
+      </div>
     </section>
   )
 }

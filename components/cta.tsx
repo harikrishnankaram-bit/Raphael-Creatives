@@ -25,7 +25,7 @@ export function CTA() {
       <div className="bg-secondary px-6 py-20 text-secondary-foreground md:px-10 md:py-28">
         <div className="mx-auto max-w-6xl flex flex-col md:flex-row md:items-center md:justify-between gap-10">
           <div>
-            <h2 className="max-w-2xl text-4xl font-semibold leading-tight tracking-tight md:text-6xl">
+            <h2 className="max-w-2xl text-3xl sm:text-4xl font-semibold leading-tight tracking-tight md:text-6xl">
               <span>Let&apos;s build your brand.</span>{' '}
               <span className="text-muted-foreground block mt-2 text-2xl md:text-3xl">
                 Ready to scale your digital presence?

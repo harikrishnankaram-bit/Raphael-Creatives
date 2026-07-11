@@ -79,10 +79,10 @@ export default function Page() {
                     className="flex flex-col gap-5"
                   >
                     <span className="text-teal-400 text-xs font-semibold uppercase tracking-wider block">Email Inquiry</span>
-                    <div className="flex items-center gap-3">
+                    <div className="flex items-center gap-3 flex-wrap">
                       <a
                         href="mailto:support@raphaelcreatives.com"
-                        className="text-3xl md:text-5xl font-semibold tracking-tight text-white hover:text-teal-300 transition-colors break-all leading-none"
+                        className="text-lg sm:text-3xl md:text-5xl font-semibold tracking-tight text-white hover:text-teal-300 transition-colors break-all leading-none"
                       >
                         support@raphaelcreatives.com
                       </a>

@@ -17,7 +17,7 @@ export function Intro() {
   return (
     <section ref={ref} className="relative bg-black px-6 pt-28 md:px-10">
       <div className="mx-auto max-w-6xl">
-        <h2 className="max-w-3xl text-4xl font-semibold leading-[1.08] tracking-tight md:text-6xl">
+        <h2 className="max-w-3xl text-3xl sm:text-4xl md:text-6xl font-semibold leading-[1.08] tracking-tight">
           <span className="text-foreground">We are Raphael Creatives.</span>{' '}
           <span className="text-muted-foreground">
             We bridge the gap between creative excellence and business outcomes, delivering brand equity and organic growth.

@@ -74,7 +74,7 @@ export function LogoSlider() {
     <section className="bg-black py-16 overflow-hidden border-b border-white/5 select-none relative z-10">
       
       {/* Small Section Header */}
-      <span className="text-xs uppercase tracking-[0.25em] text-white/30 text-center block mb-10 font-bold">
+      <span className="text-xs uppercase tracking-[0.12em] sm:tracking-[0.25em] text-white/30 text-center block mb-10 font-bold px-4">
         TRUSTED BY SYSTEM PARTNERS & GLOBAL ENTERPRISES
       </span>
 

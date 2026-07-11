@@ -68,7 +68,7 @@ function Column({
             <div className="absolute inset-0 flex items-center justify-center p-4 bg-black/10">
               <motion.div
                 whileHover={{ scale: 1.08, rotate: img.tag.rotate === 'rotate-[-3deg]' ? '-5deg' : '5deg' }}
-                className={`px-4 py-2 text-xs md:text-sm font-extrabold uppercase tracking-wider rounded-lg shadow-[0_4px_20px_rgba(0,0,0,0.3)] z-10 whitespace-nowrap cursor-default ${img.tag.colorClass} ${img.tag.rotate} transition-shadow`}
+                className={`px-2.5 py-1.5 sm:px-4 sm:py-2 text-[10px] sm:text-xs md:text-sm font-extrabold uppercase tracking-wider rounded-lg shadow-[0_4px_20px_rgba(0,0,0,0.3)] z-10 whitespace-nowrap cursor-default ${img.tag.colorClass} ${img.tag.rotate} transition-shadow`}
               >
                 {img.tag.text}
               </motion.div>

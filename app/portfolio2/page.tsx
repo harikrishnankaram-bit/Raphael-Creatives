@@ -39,7 +39,7 @@ export default function Page() {
           className="relative z-10 flex flex-col gap-6"
         >
           <span className="text-teal-400 font-semibold tracking-wider text-xs uppercase">Our Case Files</span>
-          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-none">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight leading-none">
             Stunning Design Meets{' '}
             <span className="bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent">
               Frictionless Function.
@@ -53,12 +53,12 @@ export default function Page() {
 
       {/* Filter Tabs */}
       <section className="py-8 px-6 md:px-10 max-w-6xl mx-auto border-t border-white/10">
-        <div className="flex flex-wrap gap-3">
+        <div className="flex gap-3 overflow-x-auto no-scrollbar scroll-smooth whitespace-nowrap pb-2.5 -mx-6 px-6 md:mx-0 md:px-0 md:flex-wrap md:overflow-visible">
           {categories.map((cat) => (
             <button
               key={cat}
               onClick={() => setActiveTab(cat)}
-              className={`px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer ${
+              className={`px-5 py-2.5 rounded-full text-xs font-semibold uppercase tracking-wider transition-all cursor-pointer inline-block shrink-0 ${
                 activeTab === cat
                   ? 'bg-teal-400 text-black font-bold'
                   : 'bg-zinc-900 border border-white/5 text-gray-400 hover:text-white hover:border-white/20'

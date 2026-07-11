@@ -25,7 +25,7 @@ export default function Page() {
           className="relative z-10 flex flex-col gap-6"
         >
           <span className="text-teal-400 font-semibold tracking-wider text-xs uppercase">About Our Agency</span>
-          <h1 className="text-5xl md:text-7xl font-extrabold tracking-tight leading-none">
+          <h1 className="text-4xl sm:text-5xl md:text-7xl font-extrabold tracking-tight leading-none">
             Meet the Minds Behind the{' '}
             <span className="bg-gradient-to-r from-teal-400 to-emerald-400 bg-clip-text text-transparent">
               Growth Engine.
@@ -48,7 +48,7 @@ export default function Page() {
             className="relative aspect-square w-full max-w-md bg-zinc-900 rounded-2xl overflow-hidden flex items-center justify-center border border-white/5"
           >
             <div className="absolute inset-0 bg-gradient-to-br from-teal-500/20 to-black opacity-65" />
-            <text className="text-teal-400 font-bold text-9xl">K</text>
+            <span className="text-teal-400 font-bold text-9xl">K</span>
           </motion.div>
 
           <motion.div

@@ -15,7 +15,9 @@ function Word({
   const opacity = useTransform(progress, range, [0.18, 1])
   return (
     <span className="relative mr-[0.25em] inline-block">
-      <span className="absolute left-0 top-0 select-none opacity-15">{children}</span>
+      <span className="absolute left-0 top-0 select-none opacity-15" aria-hidden="true">
+        {children}
+      </span>
       <motion.span style={{ opacity }} className="relative z-10">{children}</motion.span>
     </span>
   )

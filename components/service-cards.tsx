@@ -48,8 +48,10 @@ export function ServiceCards() {
     useEffect(() => {
         gsap.registerPlugin(ScrollTrigger);
 
+        const mm = gsap.matchMedia();
+
         // Animate underline SVG paths on scroll
-        gsap.to('.title-underline-svg path', {
+        const titleTrigger = gsap.to('.title-underline-svg path', {
             strokeDashoffset: 0,
             duration: 1.2,
             ease: 'power3.out',
@@ -61,10 +63,191 @@ export function ServiceCards() {
             }
         });
 
-        initCardAnimations();
+        const cards = gsap.utils.toArray<HTMLElement>('.card');
+        if (cards.length) {
+            const originalData = [
+                { rotation: 4 },
+                { rotation: -5 },
+                { rotation: 5 },
+                { rotation: -8 },
+                { rotation: 5 }
+            ];
+
+            let leaveTimeout: ReturnType<typeof setTimeout> | null = null;
+
+            // Desktop Animation (min-width: 769px)
+            mm.add("(min-width: 769px)", () => {
+                const listeners: { card: HTMLElement; name: string; handler: any }[] = [];
+
+                cards.forEach((card, index) => {
+                    const onMouseEnter = () => {
+                        if (leaveTimeout) { clearTimeout(leaveTimeout); leaveTimeout = null; }
+                        const hoverGap = 120;
+                        const clusterGap = 150;
+                        const cardWidth = 320;
+                        const hoveredLeft = cards[index].offsetLeft;
+                        const leftCards: { card: HTMLElement; index: number }[] = [];
+                        const rightCards: { card: HTMLElement; index: number }[] = [];
+
+                        cards.forEach((otherCard, otherIndex) => {
+                            if (otherIndex < index) leftCards.push({ card: otherCard, index: otherIndex });
+                            else if (otherIndex > index) rightCards.push({ card: otherCard, index: otherIndex });
+                        });
+
+                        const currentTop = cards[index].offsetTop;
+                        const targetCommonTop = 50;
+                        const moveY = targetCommonTop - currentTop;
+
+                        gsap.to(cards[index], { x: 0, y: moveY, rotation: 0, scale: 1.08, duration: 0.9, ease: 'elastic.out(1, 0.5)', overwrite: true });
+
+                        if (rightCards.length) {
+                            const clusterStart = hoveredLeft + cardWidth + hoverGap;
+                            rightCards.forEach((item, i) => {
+                                const targetAbsLeft = clusterStart + (i * clusterGap);
+                                const targetX = Math.max(targetAbsLeft - item.card.offsetLeft, 10);
+                                const angleRad = originalData[item.index].rotation * (Math.PI / 180);
+                                const targetY = targetX * Math.tan(angleRad);
+                                gsap.to(item.card, { x: targetX, y: targetY, rotation: originalData[item.index].rotation, scale: 1, duration: 1.0, ease: 'elastic.out(1, 0.5)', overwrite: true });
+                            });
+                        }
+
+                        if (leftCards.length) {
+                            leftCards.reverse();
+                            const clusterStart = hoveredLeft - hoverGap - cardWidth;
+                            leftCards.forEach((item, i) => {
+                                const targetAbsLeft = clusterStart - (i * clusterGap);
+                                const targetX = Math.min(targetAbsLeft - item.card.offsetLeft, -10);
+                                const angleRad = originalData[item.index].rotation * (Math.PI / 180);
+                                const targetY = targetX * Math.tan(angleRad);
+                                gsap.to(item.card, { x: targetX, y: targetY, rotation: originalData[item.index].rotation, scale: 1, duration: 1.0, ease: 'elastic.out(1, 0.5)', overwrite: true });
+                            });
+                        }
+                    };
+
+                    const onMouseMove = (e: MouseEvent) => {
+                        const rect = card.getBoundingClientRect();
+                        const x = e.clientX - rect.left;
+                        const y = e.clientY - rect.top;
+                        
+                        const xc = rect.width / 2;
+                        const yc = rect.height / 2;
+                        
+                        const rotateY = ((x - xc) / xc) * 15;
+                        const rotateX = -((y - yc) / yc) * 15;
+                        
+                        const inner = card.querySelector<HTMLElement>('.card-inner');
+                        if (inner) {
+                            gsap.to(inner, {
+                                rotateX: rotateX,
+                                rotateY: rotateY,
+                                duration: 0.3,
+                                ease: 'power2.out',
+                                overwrite: 'auto'
+                            });
+                        }
+                    };
+
+                    const onMouseLeave = () => {
+                        leaveTimeout = setTimeout(() => {
+                            cards.forEach((c, i) => {
+                                gsap.to(c, { x: 0, y: 0, scale: 1, rotation: originalData[i].rotation, duration: 1.0, ease: 'elastic.out(1, 0.5)', overwrite: true, zIndex: i + 1 });
+                            });
+                        }, 80);
+
+                        const inner = card.querySelector<HTMLElement>('.card-inner');
+                        if (inner) {
+                            gsap.to(inner, {
+                                rotateX: 0,
+                                rotateY: 0,
+                                duration: 0.5,
+                                ease: 'power2.out',
+                                overwrite: 'auto'
+                            });
+                        }
+                    };
+
+                    card.addEventListener('mouseenter', onMouseEnter);
+                    card.addEventListener('mousemove', onMouseMove);
+                    card.addEventListener('mouseleave', onMouseLeave);
+
+                    listeners.push(
+                        { card, name: 'mouseenter', handler: onMouseEnter },
+                        { card, name: 'mousemove', handler: onMouseMove },
+                        { card, name: 'mouseleave', handler: onMouseLeave }
+                    );
+                });
+
+                return () => {
+                    listeners.forEach(l => l.card.removeEventListener(l.name, l.handler));
+                    if (leaveTimeout) clearTimeout(leaveTimeout);
+                };
+            });
+
+            // Mobile Animation (max-width: 768px)
+            mm.add("(max-width: 768px)", () => {
+                const cardsWrapper = document.querySelector<HTMLElement>('.cards-wrapper');
+                if (!cardsWrapper) return;
+                const scrollPerCard = window.innerHeight * 0.8;
+                const navH = 60;
+                const mobileRotations = [-6, 4, -8, 5, -3];
+
+                // Set initial mobile coordinates
+                cards.forEach((card, i) => {
+                    gsap.set(card, {
+                        position: 'absolute', left: '50%', top: '0', xPercent: -50,
+                        y: i === 0 ? 0 : window.innerHeight * 1.1,
+                        rotation: mobileRotations[i % mobileRotations.length],
+                        zIndex: i + 1,
+                        transformOrigin: 'center center'
+                    });
+                });
+
+                const wrapperH = window.innerHeight * 0.7 + scrollPerCard * (cards.length - 1);
+                gsap.set(cardsWrapper, { height: wrapperH });
+
+                const pinTrigger = ScrollTrigger.create({
+                    trigger: cardsWrapper,
+                    start: `top ${navH}px`,
+                    end: `+=${scrollPerCard * (cards.length - 1)}`,
+                    pin: true,
+                    pinSpacing: true,
+                    id: 'mobile-cards-pin'
+                });
+
+                const triggers: ScrollTrigger[] = [];
+
+                cards.forEach((card, i) => {
+                    if (i === 0) return;
+                    const st = ScrollTrigger.create({
+                        trigger: cardsWrapper,
+                        start: `top+=${(i - 1) * scrollPerCard} ${navH}px`,
+                        end: `top+=${i * scrollPerCard} ${navH}px`,
+                        scrub: 0.4,
+                        animation: gsap.fromTo(card,
+                            { y: window.innerHeight * 1.1 },
+                            { y: 0, ease: 'power3.out' }
+                        )
+                    });
+                    triggers.push(st);
+                });
+
+                return () => {
+                    // Reset mobile-specific sizes and inline styles
+                    gsap.set(cardsWrapper, { clearProps: 'height' });
+                    cards.forEach(card => {
+                        gsap.set(card, { clearProps: 'all' });
+                        const inner = card.querySelector<HTMLElement>('.card-inner');
+                        if (inner) gsap.set(inner, { clearProps: 'all' });
+                    });
+                    pinTrigger.kill();
+                    triggers.forEach(t => t.kill());
+                };
+            });
+        }
 
         return () => {
-            ScrollTrigger.getAll().forEach(t => t.kill());
+            titleTrigger.kill();
+            mm.revert();
         };
     }, []);
 
@@ -118,156 +301,4 @@ export function ServiceCards() {
             </div>
         </section>
     );
-}
-
-function initCardAnimations() {
-    const cards = gsap.utils.toArray<HTMLElement>('.card');
-    if (!cards.length) return;
-
-    const originalData = [
-        { rotation: 4 },
-        { rotation: -5 },
-        { rotation: 5 },
-        { rotation: -8 },
-        { rotation: 5 }
-    ];
-
-    const isMobile = window.matchMedia('(max-width: 768px)').matches;
-    let leaveTimeout: ReturnType<typeof setTimeout> | null = null;
-
-    if (!isMobile) {
-        cards.forEach((card, index) => {
-            card.addEventListener('mouseenter', () => {
-                if (leaveTimeout) { clearTimeout(leaveTimeout); leaveTimeout = null; }
-                const hoverGap = 120;
-                const clusterGap = 150;
-                const cardWidth = 320;
-                const hoveredLeft = cards[index].offsetLeft;
-                const leftCards: { card: HTMLElement; index: number }[] = [];
-                const rightCards: { card: HTMLElement; index: number }[] = [];
-
-                cards.forEach((otherCard, otherIndex) => {
-                    if (otherIndex < index) leftCards.push({ card: otherCard, index: otherIndex });
-                    else if (otherIndex > index) rightCards.push({ card: otherCard, index: otherIndex });
-                });
-
-                const currentTop = cards[index].offsetTop;
-                const targetCommonTop = 50;
-                const moveY = targetCommonTop - currentTop;
-
-                gsap.to(cards[index], { x: 0, y: moveY, rotation: 0, scale: 1.08, duration: 0.9, ease: 'elastic.out(1, 0.5)', overwrite: true });
-
-                if (rightCards.length) {
-                    const clusterStart = hoveredLeft + cardWidth + hoverGap;
-                    rightCards.forEach((item, i) => {
-                        const targetAbsLeft = clusterStart + (i * clusterGap);
-                        const targetX = Math.max(targetAbsLeft - item.card.offsetLeft, 10);
-                        const angleRad = originalData[item.index].rotation * (Math.PI / 180);
-                        const targetY = targetX * Math.tan(angleRad);
-                        gsap.to(item.card, { x: targetX, y: targetY, rotation: originalData[item.index].rotation, scale: 1, duration: 1.0, ease: 'elastic.out(1, 0.5)', overwrite: true });
-                    });
-                }
-
-                if (leftCards.length) {
-                    leftCards.reverse();
-                    const clusterStart = hoveredLeft - hoverGap - cardWidth;
-                    leftCards.forEach((item, i) => {
-                        const targetAbsLeft = clusterStart - (i * clusterGap);
-                        const targetX = Math.min(targetAbsLeft - item.card.offsetLeft, -10);
-                        const angleRad = originalData[item.index].rotation * (Math.PI / 180);
-                        const targetY = targetX * Math.tan(angleRad);
-                        gsap.to(item.card, { x: targetX, y: targetY, rotation: originalData[item.index].rotation, scale: 1, duration: 1.0, ease: 'elastic.out(1, 0.5)', overwrite: true });
-                    });
-                }
-            });
-
-            card.addEventListener('mousemove', (e) => {
-                const rect = card.getBoundingClientRect();
-                const x = e.clientX - rect.left;
-                const y = e.clientY - rect.top;
-                
-                const xc = rect.width / 2;
-                const yc = rect.height / 2;
-                
-                const rotateY = ((x - xc) / xc) * 15;
-                const rotateX = -((y - yc) / yc) * 15;
-                
-                const inner = card.querySelector<HTMLElement>('.card-inner');
-                if (inner) {
-                    gsap.to(inner, {
-                        rotateX: rotateX,
-                        rotateY: rotateY,
-                        duration: 0.3,
-                        ease: 'power2.out',
-                        overwrite: 'auto'
-                    });
-                }
-            });
-
-            card.addEventListener('mouseleave', () => {
-                leaveTimeout = setTimeout(() => {
-                    cards.forEach((c, i) => {
-                        gsap.to(c, { x: 0, y: 0, scale: 1, rotation: originalData[i].rotation, duration: 1.0, ease: 'elastic.out(1, 0.5)', overwrite: true, zIndex: i + 1 });
-                    });
-                }, 80);
-
-                const inner = card.querySelector<HTMLElement>('.card-inner');
-                if (inner) {
-                    gsap.to(inner, {
-                        rotateX: 0,
-                        rotateY: 0,
-                        duration: 0.5,
-                        ease: 'power2.out',
-                        overwrite: 'auto'
-                    });
-                }
-            });
-        });
-    } else {
-        // Mobile: Stacked card scroll reveal
-        const cardsWrapper = document.querySelector<HTMLElement>('.cards-wrapper');
-        if (!cardsWrapper) return;
-        const scrollPerCard = window.innerHeight * 0.8;
-        const navH = 60;
-        const mobileRotations = [-6, 4, -8, 5, -3];
-
-        cards.forEach((card, i) => {
-            gsap.set(card, {
-                position: 'absolute', left: '50%', top: '0', xPercent: -50,
-                y: i === 0 ? 0 : window.innerHeight * 1.1,
-                rotation: mobileRotations[i % mobileRotations.length],
-                zIndex: i + 1,
-                transformOrigin: 'center center'
-            });
-        });
-
-        const wrapperH = window.innerHeight * 0.7 + scrollPerCard * (cards.length - 1);
-        gsap.set(cardsWrapper, { height: wrapperH });
-
-        ScrollTrigger.create({
-            trigger: cardsWrapper,
-            start: `top ${navH}px`,
-            end: `+=${scrollPerCard * (cards.length - 1)}`,
-            pin: true,
-            pinSpacing: true,
-            id: 'mobile-cards-pin'
-        });
-
-        cards.forEach((card, i) => {
-            if (i === 0) return;
-            gsap.fromTo(card,
-                { y: window.innerHeight * 1.1 },
-                {
-                    y: 0,
-                    ease: 'power3.out',
-                    scrollTrigger: {
-                        trigger: cardsWrapper,
-                        start: `top+=${(i - 1) * scrollPerCard} ${navH}px`,
-                        end: `top+=${i * scrollPerCard} ${navH}px`,
-                        scrub: 0.4
-                    }
-                }
-            );
-        });
-    }
 }
